@@ -2,7 +2,7 @@ select * from user;
 select substring_index(join_date, ' ', 1) from user;
 select * from blog;
 select * from category where no=3 and user_id='mickey' and no != (select min(no) from category where user_id = 'mickey');
-
+update blog set logo = 'default.jpg' where logo like '2020%.___';
 
 ## user
 select id, name from user where id = 'ellisjoe' and pw = password('ellisjoe');

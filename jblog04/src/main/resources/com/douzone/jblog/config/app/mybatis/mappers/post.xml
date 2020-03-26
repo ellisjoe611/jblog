@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="post">
+
+	<!-- 포스트 추가 ( [title, contents, category_no] >>> process count ) -->
+	<insert id="insert" parameterType="PostVO">
+		<![CDATA[
+			insert into post values(null, #{title}, #{contents}, now(), #{category_no})
+		]]>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<!-- 한 개의 포스트 삭제 ( [no] >>> process count ) -->
+	<delete id="delete" parameterType="PostVO">
+		<![CDATA[
+			delete from post where no = #{no}
+		]]>
+	</delete>
+	
+	<!-- 포스트를 카테고리 별로 삭제하기. category.xml에서 해당 카테고리를 삭제하기 전에 여기서 먼저 실행한다! -->
+	<!-- ( [category_no] >>> process count -->
+	<delete id="deleteByCategoryNo" parameterType="PostVO">
+		<![CDATA[
+			delete from post where category_no = #{category_no}
+		]]>
+	</delete>
+	
+	<!-- 포스트 목록 list 조회 ( [category_no] >>> list [no, title, reg_date(년/월/일 까지만), category_no] ) -->
+	<!-- 참고 : category_no는 유저별로 unique하며 타 사용자의 category와 구분이 가능하다 -->
+	<select id="findAll" parameterType="PostVO" resultType="PostVO">
+		<![CDATA[
+			select no, title, substring_index(reg_date, ' ', 1) as reg_date, category_no from post where category_no = #{category_no} order by no asc
+		]]>
+	</select>
+	
+	<!-- post 내용 조회 ( [no, category_no] >>> [no, title, contents, category_no] )-->
+	<select id="find" parameterType="PostVO" resultType="PostVO">
+		<![CDATA[
+			select no, title, contents, category_no from post where no = #{no} and category_no = #{category_no}
+		]]>
+	</select>
+	
+</mapper>
