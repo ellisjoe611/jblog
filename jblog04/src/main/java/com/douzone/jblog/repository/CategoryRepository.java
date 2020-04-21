@@ -51,5 +51,10 @@ public class CategoryRepository {
 	public CategoryVO findUserIdByCategoryNo(CategoryVO vo) {
 		return (CategoryVO) sqlSession.selectOne("category.findUserIdByCategoryNo", vo);
 	}
+
+	public List<CategoryVO> findLastUpdated(String blogOwnerId) {
+		List<CategoryVO> result = sqlSession.selectList("category.findLastUpdated", blogOwnerId);
+		return result;
+	}
 	
 }

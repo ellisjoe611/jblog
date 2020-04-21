@@ -64,4 +64,10 @@ public class UserService {
 		return userRepository.findUser(vo);
 	}
 
+	// 회원 가입시 기존에 가입된 이메일의 존재 여부를 확인
+	// json 형태의 결과 데이터 전송용
+	public boolean existUser(String id) {
+		return userRepository.findUserId(id) == null;
+	}
+
 }

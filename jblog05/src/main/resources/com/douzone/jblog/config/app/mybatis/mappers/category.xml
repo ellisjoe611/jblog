@@ -54,4 +54,12 @@
 		]]>
 	</select>
 	
+	<!-- 마지막으로 업데이트 된 카테고리 목록 list 조회 ( [user_id] >>> list [no, name, posted(post와 연동), description, reg_date, user_id] )-->
+	<!-- 정렬 : no 기준 오름차순 ('미분류'가 제일 위로 올라감) -->
+	<select id="findLastUpdated" parameterType="String" resultType="CategoryVO">
+		<![CDATA[
+			select no, name, (select count(*) from post where category_no = C.no) as posted, description, reg_date, user_id from category C where C.user_id = #{user_id} and no >= (select max(no) from category where user_id = #{user_id}) order by no asc
+		]]>
+	</select>
+	
 </mapper>

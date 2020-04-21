@@ -1,0 +1,16 @@
+<%
+	for(var i = 0; i < data.length; i++) {
+		var vo = data[i]; 
+%>
+		<tr id='category_<%=vo.no %>'>
+			<td><%=(i+1) %></td>
+			<td><%=vo.name %></td>
+			<td><%=vo.posted %></td>
+			<td><%=vo.description %></td>
+			<td>
+				<img id="img-delete" src="<%=pageContext %>/assets/images/delete.jpg" data-no='<%=vo.no %>'>
+			</td>
+		</tr>
+<%
+	}
+%>

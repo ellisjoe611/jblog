@@ -24,7 +24,7 @@ import com.douzone.security.Auth;
 import com.douzone.security.AuthUser;
 
 @Controller
-@RequestMapping(value = "/{id:(?!assets|user|images).*}")
+@RequestMapping(value = "/{id:(?!assets|user|images|api).*}")
 public class BlogController {
 
 	@Autowired
@@ -157,52 +157,10 @@ public class BlogController {
 			model.addAttribute("managable", true);
 		}
 
-		List<CategoryVO> categoryList = categoryService.getCategoryList(authUser.getId());
-		model.addAttribute("categoryList", categoryList);
-
 		return "blog/blog-admin-category";
 	}
 
-	// 카테고리 추가 프로세스
-	// [name, description] + user_id 추가하여 올린다.
-	@Auth
-	@RequestMapping(value = { "/admin/category/add" }, method = RequestMethod.POST)
-	public String adminCategoryAdd(@AuthUser UserVO authUser, @PathVariable("id") String blogOwnerId,
-			@RequestParam(value = "name", required = true, defaultValue = "") String newName,
-			@RequestParam(value = "description", required = true, defaultValue = "") String newDescription,
-			CategoryVO categoryVo, Model model) {
-
-		if (blogOwnerId.equals(authUser.getId()) != true) {
-			return "redirect:/";
-		}
-
-		if ("".equals(newName) || "".equals(newDescription)) {
-			return "redirect:/" + blogOwnerId + "/admin/category";
-		}
-
-		categoryService.addCategory(newName, newDescription, authUser.getId());
-		return "redirect:/" + blogOwnerId + "/admin/category";
-	}
-
-	// 카테고리 삭제 프로세스
-	// 해당 카테고리 내의 post들 제거 -> '미분류'가 아닐 시에만 삭제하기!
-	// [no, user_id] >>> process count
-	@Auth
-	@RequestMapping(value = { "/admin/category/remove/{no}" }, method = RequestMethod.GET)
-	public String adminCategoryRemove(@AuthUser UserVO authUser, @PathVariable("id") String blogOwnerId,
-			@PathVariable("no") Long category_no, Model model) {
-
-		if (blogOwnerId.equals(authUser.getId()) != true) {
-			return "redirect:/";
-		}
-
-		if (category_no == null) {
-			return "redirect:/" + blogOwnerId + "/admin/category";
-		}
-
-		categoryService.removeCategory(category_no, authUser.getId());
-		return "redirect:/" + blogOwnerId + "/admin/category";
-	}
+	
 
 	// 포스트 작성 페이지
 	// [title, contents, category_no] >>> process count

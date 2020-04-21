@@ -70,5 +70,9 @@ public class CategoryService {
 		
 		return categoryRepository.findScrollList(vo);
 	}
+
+	public List<CategoryVO> getLastInsertedCategoryList(String blogOwnerId) {
+		return categoryRepository.findLastUpdated(blogOwnerId);
+	}
 	
 }

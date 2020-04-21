@@ -23,5 +23,9 @@ public class UserRepository {
 	public UserVO findUser(UserVO vo) {
 		return sqlSession.selectOne("user.findUser", vo);
 	}
+
+	public UserVO findUserId(String email) {
+		return sqlSession.selectOne("user.findUserId", email);
+	}
 		
 }
